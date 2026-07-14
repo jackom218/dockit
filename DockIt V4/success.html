@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Payment complete — DockIt</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg" />
+<link rel="stylesheet" href="assets/fonts.css" />
+<style>
+  :root {
+    --navy-deep: #0E2338;
+    --brand-green: #288B58;
+    --paper: #FBF9F3;
+    --ink: #1B2430;
+    --muted: #66707C;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+  .card {
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #E7EAED;
+    border-radius: 14px;
+    padding: 40px 32px;
+    box-shadow: 0 20px 48px -24px rgba(14,35,56,0.35);
+  }
+  .tick {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--brand-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tick svg { width: 32px; height: 32px; }
+  h1 {
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 22px;
+    margin: 0 0 10px;
+    color: var(--navy-deep);
+  }
+  p { font-size: 14.5px; line-height: 1.55; color: var(--muted); margin: 0 0 8px; }
+  .redirect-note { font-size: 12.5px; margin-top: 18px; }
+  a.button {
+    display: inline-block;
+    margin-top: 20px;
+    background: var(--brand-green);
+    color: #fff;
+    text-decoration: none;
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 22px;
+    border-radius: 7px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="tick">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1>Payment complete — thank you!</h1>
+    <p>The watermark has been removed on this browser. Your quotes and invoices will now export clean.</p>
+    <p class="redirect-note">Taking you back to DockIt&hellip;</p>
+    <a class="button" href="index.html" id="manualLink">Back to DockIt now</a>
+  </div>
+
+  <script>
+    // This page is the target of the Stripe "After payment" redirect.
+    // Because it's a real file (success.html), Netlify serves it directly
+    // and never 404s it — which is why we redirect here instead of adding
+    // a query string to the site root.
+    (function () {
+      try {
+        window.localStorage.setItem("dockit_watermark_removed", "true");
+      } catch (e) {
+        /* storage unavailable (e.g. private browsing) — the manual button below still works,
+           and worst case the person can contact you; nothing is lost. */
+      }
+      // Bounce back to the app automatically after a short beat so they
+      // can see the confirmation, then land on the unlocked tool.
+      setTimeout(function () {
+        window.location.replace("index.html");
+      }, 2200);
+    })();
+  </script>
+</body>
+</html>
